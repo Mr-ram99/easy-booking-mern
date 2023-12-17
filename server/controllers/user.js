@@ -1,30 +1,42 @@
+const jwt = require('jsonwebtoken');
 const User = require('../models/user');
 
-const handleGetAllUsers = async (req, res) => {
-  const users = await User.find();
-  return res.status(200).send(users);
-}
-
-const handleGetUserById = async (req, res) => {
-  const id = req.params.id;
-  try {
-    const user = await User.find({ _id: id });
-    return res.status(200).send(user);
+const handleUserLogin = (req, res) => {
+  if(req.user){
+    return res.status(200).send({loggedIn: true});
   }
-  catch (err) {
-    console.log("error:", err);
-    return res.status(404).send({ msg: "user not found" });
+  const { email, password } = req.body;
+  const data = {
+    email,
+    password
   }
+  User.findOne(data).then((user) => {
+    const { name, username, email } = user;
+    const payload = {
+      name,
+      email,
+      username
+    }
+    const authToken = jwt.sign(payload, process.env.JWT_SECRET);
+    return res.status(200).send({ loggedIn: true, authToken: authToken , user: user});
+  }).catch((err) => {
+    return res.status(404).send({ loggedIn: false, err: err });
+  })
 }
 
-const handleCreateUser = async (req, res) => {
-  await User.create({
-    name: req.body.name,
-    email: req.body.email,
-    username: req.body.username,
-    password: req.body.password
-  });
-  return res.status(201).send({ message: "user created" });
+const handleCreateUser = (req, res) => {
+  const { name, username, email, password } = req.body;
+  const data = {
+    name,
+    email,
+    username,
+    password
+  }
+  User.create(data).then((user) => {
+    return res.status(201).send({ message: 'user created', user: user });
+  }).catch((err) => {
+    return res.status(500).send({ error: err });
+  })
 }
 
-module.exports = { handleGetUserById, handleGetAllUsers, handleCreateUser }
+module.exports = { handleUserLogin, handleCreateUser }

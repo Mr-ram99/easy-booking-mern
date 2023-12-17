@@ -1,14 +1,12 @@
 const express = require('express');
-const { handleGetAllUsers, handleCreateUser, handleGetUserById } = require('../controllers/user');
+const { handleCreateUser, handleUserLogin, handleUserLogout } = require('../controllers/user');
 const router = express.Router();
 
 router
-  .route('/')
-  .get(handleGetAllUsers)
-  .post(handleCreateUser);
-
+  .route('/login')
+  .post(handleUserLogin);
 router
-  .route('/:id')
-  .get(handleGetUserById)
+  .route('/')
+  .post(handleCreateUser);
 
 module.exports = router;
