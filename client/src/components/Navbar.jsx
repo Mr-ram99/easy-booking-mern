@@ -1,18 +1,33 @@
-import { Link } from "react-router-dom";
-
+import { Link, redirect } from "react-router-dom";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
+import { Button, Flex } from "antd";
+import { useEffect, useState } from "react";
 const Navbar = () => {
+  const [user, setUser] = useState(null);
+  const [cookies, setCookie, removeCookie] = useCookies(['easy-booking'])
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    setUser(cookies.user);
+  }, [cookies]);
+
+  const handleLogout = () => {
+    removeCookie('authToken');
+    removeCookie('user');
+    navigate("/login");
+  }
   return (
-    <nav className="bg-grey-100 flex justify-between items-center p-3 mb-10">
+    <Flex justify="space-between" align="center" style={{ padding: 8 }}>
       <Link to="/" className="sm:text-3xl text-xl italic font-mono">EasyBooking</Link>
-      {/* { user && 
-      <button
-        onClick={() => logout(undefined)} 
-        className="inline-block text-white rounded bg-red-500 px-6 pb-2 pt-2.5 text-xs font-medium uppercase leading-normal shadow-[0_4px_9px_-4px_#3b71ca] transition duration-150 ease-in-out hover:bg-red-600 hover:shadow-[0_8px_9px_-4px_rgba(59,113,202,0.3),0_4px_18px_0_rgba(59,113,202,0.2)]"
-      >
-        Logout
-      </button>
-      }  */}
-    </nav>
+      {user &&
+        <div>
+          <span>{user.name} </span>
+          <Button type="default" onClick={handleLogout} danger> Logout </Button>
+        </div>
+      }
+      {!user && <Link to="/login"><Button type="default"> Log In </Button></Link>}
+    </Flex>
   )
 }
 

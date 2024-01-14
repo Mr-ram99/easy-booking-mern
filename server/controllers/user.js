@@ -3,7 +3,7 @@ const User = require('../models/user');
 
 const handleUserLogin = (req, res) => {
   if(req.user){
-    return res.status(200).send({loggedIn: true});
+    return res.status(200).send({loggedIn: true, user: req.user});
   }
   const { email, password } = req.body;
   const data = {
