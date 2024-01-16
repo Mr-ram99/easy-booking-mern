@@ -4,11 +4,24 @@ import movies from '../assets/movies'
 import Movie from "../components/Movie";
 import { Flex } from "antd";
 import Navbar from "../components/Navbar";
+import { useCookies } from "react-cookie";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const [cookies, setCookie, removeCookie] = useCookies(['easy-booking']);
+  const [user, setUser] = useState(cookies.user);
+
+  const handleLogout = async () => {
+    setUser(null);
+    await removeCookie('authToken');
+    await removeCookie('user');
+  }
   return (
     <>
-      <Navbar />
+      <Navbar
+        user={user}
+        handleLogout={handleLogout}
+      />
       <Flex wrap="wrap" gap="middle" justify="center" align="center">
         {
           movies.map((movie) => {

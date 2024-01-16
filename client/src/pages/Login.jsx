@@ -4,12 +4,20 @@ import axios from 'axios';
 import { useNavigate } from "react-router-dom";
 import { useCookies } from "react-cookie";
 import Navbar from "../components/Navbar";
+import { notification } from "antd";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [cookies, setCookie, removeCookie] = useCookies(['easy-booking'])
+  const [cookies, setCookie, removeCookie] = useCookies(['easy-booking']);
+  const [notificationApi, contextHolder] = notification.useNotification();
   const navigate = useNavigate();
+
+  const openNotification = (message) => {
+    notificationApi.info({
+      message: message,
+    });
+  };
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -29,14 +37,19 @@ const Login = () => {
         navigate('/');
       }
       else {
-        console.log("no user found");
+        openNotification('some error occurred');
       }
+    }).catch((e)=>{
+      openNotification('wrong username/password');
     })
   };
 
   return (
     <>
-      <Navbar />
+      <Navbar
+        user={cookies.user}
+      />
+      {contextHolder}
       <div className="max-w-sm mx-auto my-10 rounded-lg bg-white p-8 shadow-[0_2px_15px_-3px_rgba(0,0,0,0.07),0_10px_20px_-2px_rgba(0,0,0,0.04)]">
         <div className="mb-5 text-4xl text-center font-medium">Login</div>
 
