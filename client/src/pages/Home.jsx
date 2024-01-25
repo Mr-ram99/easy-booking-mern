@@ -1,11 +1,9 @@
-import { useState, useEffect } from "react";
-import axios from 'axios';
+import { useState} from "react";
 import movies from '../assets/movies'
 import MovieCard from "../components/MovieCard";
 import { Flex } from "antd";
 import Navbar from "../components/Navbar";
 import { useCookies } from "react-cookie";
-import { useNavigate } from "react-router-dom";
 import MovieCarousel from "../components/Carousal";
 
 const Home = () => {
