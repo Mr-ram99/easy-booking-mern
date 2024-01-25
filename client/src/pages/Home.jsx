@@ -6,6 +6,7 @@ import { Flex } from "antd";
 import Navbar from "../components/Navbar";
 import { useCookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import MovieCarousel from "../components/Carousal";
 
 const Home = () => {
   const [cookies, setCookie, removeCookie] = useCookies(['easy-booking']);
@@ -22,6 +23,7 @@ const Home = () => {
         user={user}
         handleLogout={handleLogout}
       />
+      <MovieCarousel />
       <Flex wrap="wrap" gap="middle" justify="center" align="center">
         {
           movies.map((movie) => {
