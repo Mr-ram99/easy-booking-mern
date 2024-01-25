@@ -2,7 +2,7 @@ import React from 'react';
 import { Card } from 'antd';
 const { Meta } = Card;
 
-const Movie = ({ movie }) => (
+const MovieCard = ({ movie }) => (
   <Card
     style={{
       width: 300,
@@ -20,4 +20,4 @@ const Movie = ({ movie }) => (
     />
   </Card>
 );
-export default Movie;
+export default MovieCard;
